@@ -600,6 +600,7 @@ impl ParameterBuilder {
         match self.style {
             Some(ParameterStyle::Json) if component.is_some() => {
                 self.content.insert("application/json".into(), Content::new(component.unwrap().into()));
+                self.style = None;
                 self
             },
             _ => set_value!(self schema component.map(|component| component.into())),
