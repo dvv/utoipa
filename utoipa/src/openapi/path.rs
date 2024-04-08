@@ -608,7 +608,14 @@ impl ParameterBuilder {
 
     /// Add or change serialization style of [`Parameter`].
     pub fn style(mut self, style: Option<ParameterStyle>) -> Self {
-        set_value!(self style style)
+        match style {
+            Some(ParameterStyle::Json) => {
+                self.content.insert("application/json".into(), self.schema);
+                self.schema = None;
+                set_value!(self style None)
+            },
+            style => set_value!(self style style),
+        }
     }
 
     /// Define whether [`Parameter`]s are exploded or not.
