@@ -597,7 +597,13 @@ impl ParameterBuilder {
 
     /// Add or change [`Parameter`]s schema.
     pub fn schema<I: Into<RefOr<Schema>>>(mut self, component: Option<I>) -> Self {
-        set_value!(self schema component.map(|component| component.into()))
+        match self.style {
+            Some(ParameterStyle::Json) => {
+                self.content.insert("application/json".into(), Content::new(schema));
+                self
+            },
+            _ => set_value!(self schema component.map(|component| component.into())),
+        }
     }
 
     /// Add [`Content`] of the [`Response`] with content type e.g `application/json`.
@@ -608,15 +614,7 @@ impl ParameterBuilder {
 
     /// Add or change serialization style of [`Parameter`].
     pub fn style(mut self, style: Option<ParameterStyle>) -> Self {
-        match style {
-            //Some(ParameterStyle::Json) if self.schema.is_some() => {
-            Some(ParameterStyle::Json) => {
-                self.content.insert("application/json".into(), Content::new(self.schema.unwrap()));
-                self.schema = None;
-                set_value!(self style None)
-            },
-            style => set_value!(self style style),
-        }
+        set_value!(self style style)
     }
 
     /// Define whether [`Parameter`]s are exploded or not.
