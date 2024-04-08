@@ -598,7 +598,7 @@ impl ParameterBuilder {
     /// Add or change [`Parameter`]s schema.
     pub fn schema<I: Into<RefOr<Schema>>>(mut self, component: Option<I>) -> Self {
         match self.style {
-            Some(ParameterStyle::Json) && component.is_some() => {
+            Some(ParameterStyle::Json) if component.is_some() => {
                 self.content.insert("application/json".into(), Content::new(component.unwrap().into()));
                 self
             },
