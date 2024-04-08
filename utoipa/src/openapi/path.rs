@@ -682,6 +682,9 @@ pub enum ParameterStyle {
     /// Simple way of rendering nested objects using form parameters .e.g. _`color[B]=150`_.
     /// Allowed with [`ParameterIn::Query`].
     DeepObject,
+    /// Simple way of rendering nested objects using JSON .e.g. _`{"color":{"blue":150}}`_.
+    /// Allowed with [`ParameterIn::Query`].
+    Json,
 }
 
 #[cfg(test)]

@@ -470,11 +470,12 @@ pub enum ParameterStyle {
     SpaceDelimited,
     PipeDelimited,
     DeepObject,
+    Json,
 }
 
 impl Parse for ParameterStyle {
     fn parse(input: ParseStream) -> syn::Result<Self> {
-        const EXPECTED_STYLE: &str =  "unexpected style, expected one of: Matrix, Label, Form, Simple, SpaceDelimited, PipeDelimited, DeepObject";
+        const EXPECTED_STYLE: &str =  "unexpected style, expected one of: Matrix, Label, Form, Simple, SpaceDelimited, PipeDelimited, DeepObject, Json";
         let style = input.parse::<Ident>()?;
 
         match &*style.to_string() {
@@ -485,6 +486,7 @@ impl Parse for ParameterStyle {
             "SpaceDelimited" => Ok(ParameterStyle::SpaceDelimited),
             "PipeDelimited" => Ok(ParameterStyle::PipeDelimited),
             "DeepObject" => Ok(ParameterStyle::DeepObject),
+            "Json" => Ok(ParameterStyle::Json),
             _ => Err(Error::new(style.span(), EXPECTED_STYLE)),
         }
     }
@@ -513,6 +515,9 @@ impl ToTokens for ParameterStyle {
             }
             ParameterStyle::DeepObject => {
                 tokens.extend(quote! { utoipa::openapi::path::ParameterStyle::DeepObject })
+            }
+            ParameterStyle::Json => {
+                tokens.extend(quote! { utoipa::openapi::path::ParameterStyle::Json })
             }
         }
     }
