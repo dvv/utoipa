@@ -610,7 +610,7 @@ impl ParameterBuilder {
     pub fn style(mut self, style: Option<ParameterStyle>) -> Self {
         match style {
             Some(ParameterStyle::Json) => {
-                self.content.insert("application/json".into(), self.schema);
+                self.content.insert("application/json".into(), Content::new(self.schema));
                 self.schema = None;
                 set_value!(self style None)
             },
